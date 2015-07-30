@@ -3,8 +3,8 @@
   Created by Renat Abaidulin, July 22, 2015.
 */
 
-#ifndef arobotic_h
-#define arobotic_h
+#ifndef aroboticlcd_h
+#define aroboticlcd_h
 
 #if ARDUINO >= 100
  #include "Arduino.h"
@@ -16,7 +16,7 @@
 class ARobotic
 {
 public:
-	ARobotic(int mode);//режим работы: с энкодерами или без
+	ARoboticLCD(int mode);//режим работы: с энкодерами,
 
 private:
 	

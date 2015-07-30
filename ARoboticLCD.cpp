@@ -3,9 +3,8 @@
   Created by Renat Abaidulin, July 22, 2015.
 */
 
+#include "ARoboticLCD.h"
 
-#include "ARobotic.h"
-
-ARobotic::ARobotic(int mode){
+ARobotic::ARoboticLCD(int mode){
   
 }
