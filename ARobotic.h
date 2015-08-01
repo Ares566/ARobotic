@@ -21,6 +21,7 @@
 
 #define AR_WHEEL_D 65 //диаметр колеса в мм
 
+
 class ARobotic
 {
 public:
@@ -50,11 +51,12 @@ public:
 	#endif
 
 private:
-	uint16_t lw_enc_counter,rw_enc_counter;
+	
 	uint16_t _ar_width;
 	//функции обрабоки прерываний от энкодера колес
-	void encoderFuncM_L();
-	void encoderFuncM_R();
+	
 
 };
+void encoderFuncM_L();
+void encoderFuncM_R();
 #endif

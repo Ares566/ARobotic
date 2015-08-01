@@ -11,6 +11,7 @@
 #define DIRL 4          // Направление вращение левого двигателя 
 #define DIRR 7          // Направление вращение правого двигателя 
 
+uint16_t lw_enc_counter,rw_enc_counter;
 
 ARobotic::ARobotic(int mode,uint16_t ar_width){
   lw_enc_counter = rw_enc_counter = 0;
@@ -141,13 +142,13 @@ void ARobotic::waitingDistance4RM(uint16_t distance){
 *  подсчитываем пройденное расстояние
 */
 //функция вызываемая прерыванием для подсчета оборотов левого колеса
-void  ARobotic::encoderFuncM_L() {
+void  encoderFuncM_L() {
   if (digitalRead(2) == HIGH) {
     lw_enc_counter++;
   } 
 }
 //функция вызываемая прерыванием для подсчета оборотов левого колеса
-void ARobotic::encoderFuncM_R() {
+void encoderFuncM_R() {
   if (digitalRead(3) == HIGH) {
     rw_enc_counter++;
   } 
