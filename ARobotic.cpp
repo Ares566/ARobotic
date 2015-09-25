@@ -168,8 +168,8 @@ void ARobotic::moveForward(uint8_t speed, uint16_t distance){
 	
 	digitalWrite(DIRL,HIGH);
 	digitalWrite(DIRR,HIGH);
-	digitalWrite(ENR,speed);
-	digitalWrite(ENL,speed);
+	analogWrite(ENR,speed);
+	analogWrite(ENL,speed);
 
 	//обработка distance
 	if (distance){
@@ -183,8 +183,8 @@ void ARobotic::moveBackward(uint8_t speed, uint16_t distance){
 
 	digitalWrite(DIRL,LOW);
 	digitalWrite(DIRR,LOW);
-	digitalWrite(ENR,speed);
-	digitalWrite(ENL,speed);
+	analogWrite(ENR,speed);
+	analogWrite(ENL,speed);
 
 	//обработка distance
 	if (distance){
@@ -212,8 +212,8 @@ void ARobotic::turnLeft(int degree){
 		speed = 200;
 	}
 
-	digitalWrite(ENL,0);//левое колесо на месте
-	digitalWrite(ENR,speed);//правое крутим
+	analogWrite(ENL,0);//левое колесо на месте
+	analogWrite(ENR,speed);//правое крутим
 	
 	waitingDistance4RM(ArcLen);
 	stopMoving();
@@ -238,8 +238,8 @@ void ARobotic::turnRight(int degree){
 		speed = 200;
 	}
 
-	digitalWrite(ENL,speed);
-	digitalWrite(ENR,0);
+	analogWrite(ENL,speed);
+	analogWrite(ENR,0);
 
 	waitingDistance4LM(ArcLen);
 	stopMoving();
@@ -254,13 +254,18 @@ void ARobotic::stopMoving(){
 //ждем пока левый мотор проедет определенную дистанцию
 void ARobotic::waitingDistance4LM(uint16_t distance){
 	uint16_t iCurDistance = getLeftWheelDistance();
-	while((iCurDistance + distance) > getLeftWheelDistance()){}
+	uint16_t iCalcDistance = getLeftWheelDistance();
+
+	while((iCurDistance + distance) > iCalcDistance){
+		delay(1);
+		iCalcDistance = getLeftWheelDistance();
+	}
 }
 
 //ждем пока правый мотор проедет определенную дистанцию
 void ARobotic::waitingDistance4RM(uint16_t distance){
 	uint16_t iCurDistance = getRightWheelDistance();
-	while((iCurDistance + distance) > getRightWheelDistance()){}
+	while((iCurDistance + distance) > getRightWheelDistance()){delay(1);}
 }
 /*
 *  Работа с энкодерами моторов
@@ -303,7 +308,15 @@ void ARobotic::resetRightWheelDistance(){
 }
 
 void ARobotic::digitalWriteP(uint8_t pin, uint8_t val){
-	  PCF_20.write(pin, val);
+	if (pin<1)
+	{
+		return;
+	}
+	if (pin>8)
+	{
+		/* стандартный digitalWrite */
+	}
+	PCF_20.write(pin-1, val);
 }
 
 void ARobotic::toggleP(uint8_t pin){
