@@ -96,6 +96,11 @@ public:
 	void waitingDistance4LM(uint16_t distance);//ждем пока левый мотор проедет определенную дистанцию
 	void waitingDistance4RM(uint16_t distance);//ждем пока правый мотор проедет определенную дистанцию
 
+	void setLeftWheelSpeed(uint8_t speed);//устанавливаем скорость левого мотора
+	uint8_t getLeftWheelSpeed();//берем скорость левого мотора
+	void setRightWheelSpeed(uint8_t speed);//устанавливаем скорость правого мотора
+	uint8_t getRightWheelSpeed();//берем скорость правого мотора
+
 	//публичные функции работы с энкодерами колес
 	uint16_t getLeftWheelDistance();//пройденное расстояние левого колеса
 	uint16_t getRightWheelDistance();//пройденное расстояние правого колеса

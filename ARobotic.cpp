@@ -119,6 +119,7 @@ const byte BasicFont[][8] PROGMEM = {
 
 
 uint16_t lw_enc_counter,rw_enc_counter;
+uint8_t lw_speed,rw_speed;//скорость левого и правого моторов
 
 PCF8574 PCF_20(0x20);
 
@@ -163,13 +164,39 @@ void ARobotic::initAR(int mode,uint16_t ar_width){
 *  Работа с  моторами
 *  при передаче ненулевых параметров выход из функции только по истечении dest
 */
+
+//устанавливаем скорость левого мотора
+void ARobotic::setLeftWheelSpeed(uint8_t speed){
+	lw_speed = speed;
+	analogWrite(ENL,lw_speed);
+}
+
+//берем скорость левого мотора
+uint8_t ARobotic::getLeftWheelSpeed(){
+	return lw_speed;
+}
+
+//устанавливаем скорость правого мотора
+void ARobotic::setRightWheelSpeed(uint8_t speed){
+	rw_speed = speed;
+	analogWrite(ENR,rw_speed);
+}
+
+//берем скорость правого мотора
+uint8_t ARobotic::getRightWheelSpeed(){
+	return rw_speed;
+}
+
 //едем вперед
 void ARobotic::moveForward(uint8_t speed, uint16_t distance){
 	
 	digitalWrite(DIRL,HIGH);
 	digitalWrite(DIRR,HIGH);
-	analogWrite(ENR,speed);
-	analogWrite(ENL,speed);
+	if (speed){
+		setRightWheelSpeed(speed);
+		setLeftWheelSpeed(speed);
+	}
+	
 
 	//обработка distance
 	if (distance){
@@ -183,8 +210,10 @@ void ARobotic::moveBackward(uint8_t speed, uint16_t distance){
 
 	digitalWrite(DIRL,LOW);
 	digitalWrite(DIRR,LOW);
-	analogWrite(ENR,speed);
-	analogWrite(ENL,speed);
+	if (speed){
+		setRightWheelSpeed(speed);
+		setLeftWheelSpeed(speed);
+	}
 
 	//обработка distance
 	if (distance){
@@ -315,6 +344,7 @@ void ARobotic::digitalWriteP(uint8_t pin, uint8_t val){
 	if (pin>8)
 	{
 		/* стандартный digitalWrite */
+		digitalWrite(pin,val);
 	}
 	PCF_20.write(pin-1, val);
 }
@@ -323,7 +353,16 @@ void ARobotic::toggleP(uint8_t pin){
 	return PCF_20.toggle(pin);
 }
 uint8_t ARobotic::digitalReadP(uint8_t pin){
-	return PCF_20.read(pin);
+	if (pin<1)
+	{
+		return 0;
+	}
+	if (pin>8)
+	{
+		/* стандартный digitalRead */
+		return digitalRead(pin);
+	}
+	return PCF_20.read(pin-1);
 }
 
 
